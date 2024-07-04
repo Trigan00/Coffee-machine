@@ -1,5 +1,6 @@
 import pygame as pg
 
+
 class Cup(pg.Surface):
     def __init__(self, start_x: int, start_y: int, text: str):
         super().__init__((50, 70))
@@ -7,12 +8,21 @@ class Cup(pg.Surface):
         self.x = start_x
         self.y = start_y
         self.text = text
-    
+        self.cup = pg.image.load('cup.png')
+        self.cup = pg.transform.scale(self.cup, (70, 70))
+
+        # Инициализация шрифта
+        pg.font.init()
+        self.font = pg.font.SysFont('Arial', 20)
+        self.text_surface = self.font.render(self.text, True, (255, 255, 255))
+
     def move_left(self, distance: int):
         self.x -= distance
-    
+
     def draw(self, surface: pg.Surface):
-        surface.blit(self, (self.x, self.y))
+        surface.blit(self.cup, (self.x, self.y))
+        text_rect = self.text_surface.get_rect(center=(self.x + 35, self.y + 35))  # Центрируем текст по середине изображения
+        surface.blit(self.text_surface, text_rect)
 
 class Window(pg.Surface):
     __GRAY = (169, 169, 169)
@@ -53,7 +63,7 @@ class Window(pg.Surface):
 
 
     def cupMove(self):
-        if (self.cup.x == 120):
+        if (self.cup.x == 110):
             self.flags["isCupMove"] = False
         self.cup.move_left(2)
         

@@ -1,7 +1,7 @@
 import pygame as pg
 from CoffeeMachine import CoffeeMachine
 from Wave import Wave
-from Window import Window, Cup
+from Window import Window
 
 WIDTH = 750
 HEIGHT = 900
