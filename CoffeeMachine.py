@@ -61,6 +61,10 @@ class CoffeeMachine(pg.Surface):
         pg.draw.rect(container, self.__YELLOW_SHADOW, (0, 0, self.__WIDTH, 7))
         self.__draw_rounded_rect(container, self.__BROWN, (40, 0, 200, 250), 70)
 
+        # сдача
+        pg.draw.circle(container, (100, 100, 100), (self.__WIDTH - 40, self.__HEIGHT / 2 - 200), 25)
+        pg.draw.circle(container, (200, 200, 200), (self.__WIDTH - 40, self.__HEIGHT / 2 - 200), 20)
+
         self.__draw_bottom(container)
 
         self.blit(container, (10, 60))

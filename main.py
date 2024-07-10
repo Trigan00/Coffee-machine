@@ -1,7 +1,9 @@
 import pygame as pg
 from CoffeeMachine import CoffeeMachine
 from Wave import Wave
-from Window import Window
+from Window import Window, Cup
+from Menu import CoffeeMenu
+from Terminal import Terminal
 
 WIDTH = 750
 HEIGHT = 900
@@ -20,13 +22,29 @@ pg.display.set_caption("Coffee to go")
 clock = pg.time.Clock()
 
 flags = {
-    "isCupMove": False
+    "Latte": False,
+    "Mocha": False
+}
+
+currnet_item = {
+    'name': "",
+    'price': 0
 }
 
 coffeeMachine = CoffeeMachine()
 (cMX, cMY) = coffeeMachine.get_size()
-window = Window(flags)
-window.draw_cup(text="Ayaz")
+window = Window()
+
+cupArr = []
+cupArr.append(Cup(270, 200 - 80, "Latte", flags))
+cupArr.append(Cup(270, 200 - 80, "Mocha", flags))
+
+coffee_types = ["Latte", "Mocha"]
+coffee_prices = [" 100 руб.", " 150 руб."]
+coffee_menu = CoffeeMenu(screen, coffee_types, coffee_prices, flags)
+
+button_types = [100, 200, 5, 10]
+terminal = Terminal(screen, button_types)
 
 
 steam = [Wave(WIDTH - 180, 
@@ -44,16 +62,31 @@ while running:
         if event.type == pg.QUIT:
             running = False
         elif event.type == pg.MOUSEBUTTONDOWN:
-            if event.button == 1:  # Левая кнопка мыши
-                flags["isCupMove"] = True
+            coffee_menu.check_click(event.pos)
+            terminal.check_click(event.pos)
+
+            # if terminal.button_rect.collidepoint(event.pos):
+            #     terminal.select_note()
+
 
     screen.blit(coffeeMachine, (WIDTH // 2 - 250, 40))
+
+    # terminal.display_amount()
+    # screen.blit(terminal.surface, (440, 200))
+    
     coffeeMachine.blit(window, (10, cMY//1.8))
+    coffee_menu.draw_buttons()
+    terminal.draw_buttons()
+    
 
-    if flags["isCupMove"]:
-        window.cupMove()
-    window.cupDraw()
-
+    for cup in cupArr:
+        if (flags[cup.text] == True):
+            cup.move_left(2)
+    
+    window.drawBox()
+    for cup in cupArr:
+        cup.draw(window)
+    
     for wave in steam:
         wave.update()
         wave.draw(screen)
