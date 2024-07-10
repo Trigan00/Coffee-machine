@@ -21,14 +21,10 @@ screen = pg.display.set_mode((WIDTH, HEIGHT))
 pg.display.set_caption("Coffee to go")
 clock = pg.time.Clock()
 
-flags = {
-    "Latte": False,
-    "Mocha": False
-}
-
-currnet_item = {
+current_item = {
     'name': "",
-    'price': 0
+    'price': 0,
+    'is_payed': False
 }
 
 coffeeMachine = CoffeeMachine()
@@ -36,15 +32,16 @@ coffeeMachine = CoffeeMachine()
 window = Window()
 
 cupArr = []
-cupArr.append(Cup(270, 200 - 80, "Latte", flags))
-cupArr.append(Cup(270, 200 - 80, "Mocha", flags))
+cupArr.append(Cup(270, 200 - 80, "Latte", current_item))
+cupArr.append(Cup(270, 200 - 80, "Mocha", current_item))
+cupArr.append(Cup(270, 200 - 80, "Raf", current_item))
 
-coffee_types = ["Latte", "Mocha"]
-coffee_prices = [" 100 руб.", " 150 руб."]
-coffee_menu = CoffeeMenu(screen, coffee_types, coffee_prices, flags)
+coffee_types = ["Latte", "Mocha", "Raf"]
+coffee_prices = [100, 150, 200]
+coffee_menu = CoffeeMenu(screen, coffee_types, coffee_prices, current_item)
 
 button_types = [100, 200, 5, 10]
-terminal = Terminal(screen, button_types)
+terminal = Terminal(screen, button_types, current_item)
 
 
 steam = [Wave(WIDTH - 180, 
@@ -63,8 +60,10 @@ while running:
             running = False
         elif event.type == pg.MOUSEBUTTONDOWN:
             coffee_menu.check_click(event.pos)
-            terminal.check_click(event.pos)
-
+            isReset = terminal.check_click(event.pos)
+            if isReset:
+                for cup in cupArr:
+                    cup.resetPos()
             # if terminal.button_rect.collidepoint(event.pos):
             #     terminal.select_note()
 
@@ -80,7 +79,7 @@ while running:
     
 
     for cup in cupArr:
-        if (flags[cup.text] == True):
+        if (current_item['name'] == cup.text and current_item['is_payed']):
             cup.move_left(2)
     
     window.drawBox()

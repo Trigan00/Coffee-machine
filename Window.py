@@ -5,10 +5,10 @@ class Cup(pg.Surface):
     
     __YELLOW = (255, 225, 131)
 
-    def __init__(self, start_x: int, start_y: int, text: str, flags):
+    def __init__(self, start_x: int, start_y: int, text: str, current_item):
         super().__init__((50, 70))
         self.fill((160, 20, 20))
-        self.flags = flags
+        self.current_item = current_item
         self.x = start_x
         self.y = start_y
         self.text = text
@@ -22,7 +22,8 @@ class Cup(pg.Surface):
 
     def move_left(self, distance: int):
         if (self.x == 110):
-            self.flags[self.text] = False
+            self.current_item['name'] = ""
+            # self.current_item['is_payed'] = False
         self.x -= distance
 
     def draw(self, surface: pg.Surface):
@@ -30,6 +31,9 @@ class Cup(pg.Surface):
         text_rect = self.text_surface.get_rect(center=(self.x + 35, self.y + 35))  # Центрируем текст по середине изображения
         surface.blit(self.text_surface, text_rect)
         pg.draw.rect(surface, self.__YELLOW, (270, 0, 230, 200))
+
+    def resetPos(self):
+        self.x = 270
 
 class Window(pg.Surface):
     __GRAY = (169, 169, 169)
