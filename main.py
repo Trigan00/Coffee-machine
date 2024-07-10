@@ -52,6 +52,16 @@ steam = [Wave(WIDTH - 180,
 running = True
 screen.fill(BLUE)
 
+# Параметры воды
+water_width = 20
+water_height = 0
+water_x = 240 + (70 - water_width) // 2
+water_y = 0
+
+# Флаг для анимации
+pouring = False
+start_time = 0
+pour_duration = 3000  # длительность наливания в миллисекундах
 
 while running:
     
@@ -64,6 +74,9 @@ while running:
             if isReset:
                 for cup in cupArr:
                     cup.resetPos()
+            # if event.button == 3:
+            #         pouring = True
+            #         start_time = pg.time.get_ticks()
 
 
     screen.blit(coffeeMachine, (WIDTH // 2 - 250, 40))
@@ -80,7 +93,22 @@ while running:
     window.drawBox()
     for cup in cupArr:
         cup.draw(window)
+
+    if current_item["name"] != "" and current_item["is_payed"]:
+        pouring = True
+        start_time = pg.time.get_ticks()
     
+    if pouring:
+        elapsed_time = pg.time.get_ticks() - start_time
+        if elapsed_time < pour_duration:
+            water_height = elapsed_time / pour_duration * 200
+            if water_y <= 80:
+                water_y = water_height
+        else:
+            pouring = False
+    if pouring:
+        pg.draw.rect(screen, (68, 45, 37), (water_x, 500, water_width, water_y))
+
     for wave in steam:
         wave.update()
         wave.draw(screen)
