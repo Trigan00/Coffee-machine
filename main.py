@@ -64,15 +64,10 @@ while running:
             if isReset:
                 for cup in cupArr:
                     cup.resetPos()
-            # if terminal.button_rect.collidepoint(event.pos):
-            #     terminal.select_note()
 
 
     screen.blit(coffeeMachine, (WIDTH // 2 - 250, 40))
 
-    # terminal.display_amount()
-    # screen.blit(terminal.surface, (440, 200))
-    
     coffeeMachine.blit(window, (10, cMY//1.8))
     coffee_menu.draw_buttons()
     terminal.draw_buttons()
